@@ -1,0 +1,22 @@
+# データベース（個人データ）
+household.db
+
+# 個人のCSVファイル（サンプル以外）
+csv/*.csv
+!csv/sample_*.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# 環境変数
+.env
+
+# Streamlitキャッシュ
+.streamlit/
