@@ -25,7 +25,11 @@ MoneyForward MEのエクスポートCSVを自前のSQLiteデータベースに�
 
 ---
 
-## 🖥️ ダッシュボード（v1）
+## 🖥️ バージョン
+
+### v1 — ローカル版（`moneyreverse_dashboard.py`）
+
+SQLiteにデータを蓄積して、ローカルのStreamlitで表示。Raspberry Piでの常時稼働に最適。
 
 | ページ | 内容 |
 |--------|------|
@@ -33,9 +37,21 @@ MoneyForward MEのエクスポートCSVを自前のSQLiteデータベースに�
 | 📅 年次サマリー | 年別支出推移・カテゴリ別グラフ |
 | 🗓️ 月次レビュー | カテゴリ別支出内訳・円グラフ |
 
+### v1.1 — Streamlit Cloud版（`moneyreverse_cloud.py`）
+
+インストール不要。ブラウザからCSVをアップロードするだけで即解析。**データはサーバーに保存されません。**
+
+| ページ | 内容 |
+|--------|------|
+| 💳 取引履歴 | 月・カテゴリ・キーワードで絞り込み |
+| 📅 年次サマリー | 年別支出推移・カテゴリ別グラフ |
+| 🗓️ 月次レビュー | カテゴリ別支出内訳・円グラフ |
+
+👉 **[Streamlit Cloudで今すぐ試す](https://moneyreverse.streamlit.app)**（インストール不要）
+
 ---
 
-## 🚀 セットアップ
+## 🚀 セットアップ（v1 ローカル版）
 
 ### 必要環境
 
@@ -53,10 +69,10 @@ pip install -r requirements.txt
 ### サンプルデータで試す
 
 ```bash
-# サンプルCSVを逆向きにデータベースに取り込む 
+# サンプルCSVを取り込む
 bash moneyreverse_importfiles.sh
 
-# ダッシュボード起動 
+# ダッシュボード起動
 streamlit run moneyreverse_dashboard.py
 ```
 
@@ -64,9 +80,23 @@ streamlit run moneyreverse_dashboard.py
 
 ---
 
-## 📥 MoneyForwardのCSVを取り込む
+## ☁️ Streamlit Cloud版の使い方（v1.1）
 
-### MoneyForwardからエクスポート
+```bash
+# ローカルで試す
+streamlit run moneyreverse_cloud.py
+```
+
+または [Streamlit Cloud](https://moneyreverse.streamlit.app) をブラウザで開いて、CSVをアップロードするだけ。
+
+### プライバシーについて
+- アップロードされたデータはサーバーに**保存されません**
+- セッション終了時にデータは消去されます
+- [コードで確認できます](moneyreverse_cloud.py)
+
+---
+
+## 📥 MoneyForwardのCSVを取り込む
 
 ```
 MoneyForward ME にログイン
@@ -76,13 +106,9 @@ MoneyForward ME にログイン
 → 期間を選択してダウンロード
 ```
 
-### 取り込み
-
 ```bash
 # 1ファイル
-python3 moneyreverse_importer.py 収入・支出詳細_2026-04-01_2026-04-30.csv
-
-python3 moneyreverse_importer.py sample_2026_02.csv
+python3 moneyreverse_importer.py 2026-04.csv
 
 # csv/ ディレクトリのファイルを一括取り込み
 bash moneyreverse_importfiles.sh
@@ -96,10 +122,11 @@ bash moneyreverse_importfiles.sh
 
 ```
 moneyreverse/
-├── moneyreverse_dashboard.py    # Streamlitダッシュボード
-├── moneyreverse_seomporter.py     # MoneyForward CSVインポーター
-├── moneyreverse_im_importfiles.sh  # 一括取り込みスクリプト
-├── csv/                         # 取り込むCSV (例: '収入・支出詳細_2026-04-01_2026-04-30.csv') を置くディレクトリ
+├── moneyreverse_dashboard.py    # v1 ローカル版ダッシュボード
+├── moneyreverse_cloud.py        # v1.1 Streamlit Cloud版
+├── moneyreverse_importer.py     # MoneyForward CSVインポーター
+├── moneyreverse_importfiles.sh  # 一括取り込みスクリプト
+├── csv/                         # 取り込むCSVを置くディレクトリ
 │   ├── sample_2026-02.csv       # サンプルデータ
 │   ├── sample_2026-03.csv
 │   └── sample_2026-04.csv
@@ -118,16 +145,18 @@ moneyreverse/
 - `household.db` はローカルのみ（`.gitignore` で除外済み）
 - 個人のCSVファイルも `.gitignore` で除外済み
 - `csv/sample_*.csv` のサンプルデータのみGit管理
+- v1.1はDBなし、アップロードデータはセッション終了時に消去
 
 ---
 
 ## 🗺️ ロードマップ
 
-- [x] MoneyForward CSVインポート
-- [x] 取引履歴・年次サマリー・月次レビュー
-- [ ] **v2 (MoneyReBirth) **: 銀行・証券・クレジットカード・Suica対応
-- [ ] **v2 (MoneyReBirth) **: カテゴリ自動分類（AI活用）
-- [ ] **v2 (MoneyReBirth) **: 資産推移・ポートフォリオグラフ
+- [x] v1: MoneyForward CSVインポート（ローカル版）
+- [x] v1.1: Streamlit Cloud版（インストール不要）
+- [ ] **v2 (MoneyRebirth)**: 銀行・証券・クレジットカード・Suica対応
+- [ ] **v2 (MoneyRebirth)**: ファイル自動判定（CSV/PDF）
+- [ ] **v2 (MoneyRebirth)**: カテゴリ自動分類（AI活用）
+- [ ] **v2 (MoneyRebirth)**: 資産推移・ポートフォリオグラフ
 
 ---
 
